@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>ВНИМАНИЕ! СИСТЕМНЫЙ СБОЙ</title>
+    <style>
+        * { box-sizing: border-box; }
+        body, html { 
+            margin: 0; padding: 0; width: 100%; height: 100%; 
+            background-color: #0c0707; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+            color: #ff3b30; overflow: hidden; user-select: none; cursor: pointer;
+        }
+        #matrix-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; opacity: 0.12; }
+        .screen {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; flex-direction: column; justify-content: center;
+            align-items: center; z-index: 2; text-align: center; padding: 20px;
+        }
+        #start-screen { background: #121214; }
+        #hack-screen { display: none; background: radial-gradient(circle, #240c0c 0%, #030101 100%); }
+        
+        h1 { font-size: 46px; text-shadow: 0 0 20px rgba(255, 59, 48, 0.6); margin-bottom: 10px; animation: blink 1.2s infinite; font-weight: 900; letter-spacing: -1px; }
+        p { font-size: 22px; color: #a4a4aa; max-width: 600px; line-height: 1.5; }
+        .click-prompt { font-size: 16px; color: #ff3b30; margin-top: 40px; text-transform: uppercase; letter-spacing: 2px; font-weight: bold; }
+        
+        /* Большие карточки с собакой */
+        .dog-card {
+            position: absolute; 
+            width: 480px; 
+            background: #1c1c1e; 
+            border: 2px solid #ff3b30;
+            border-radius: 20px; 
+            padding: 16px; 
+            box-shadow: 0 15px 50px rgba(0,0,0,0.8), 0 0 30px rgba(255,59,48,0.2);
+            z-index: 100; 
+            display: none; 
+            text-align: center;
+            transform: scale(0); 
+            animation: popOpen 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+        
+        .img-container {
+            width: 100%;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #000;
+            border: 1px solid #2c2c2e;
+        }
+        
+        .dog-img { 
+            width: 100%; 
+            height: auto; 
+            display: block;
+        }
+        
+        .dog-text { 
+            color: #fff; 
+            font-size: 26px; 
+            font-weight: 800; 
+            margin-top: 16px; 
+            text-transform: uppercase; 
+            letter-spacing: 1px; 
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5); 
+        }
+        
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        @keyframes popOpen { to { transform: scale(1); } }
+    </style>
+</head>
+<!-- Клик в ЛЮБОЕ место экрана теперь запускает пранк -->
+<body onclick="startPrank()">
+
+    <canvas id="matrix-bg"></canvas>
+
+    <!-- Стартовое окно (без кнопок, реагирует на клик по экрану) -->
+    <div id="start-screen" class="screen">
+        <h1 style="color: #fff; animation: none;">Сканирование уязвимостей</h1>
+        <p>Выполняется проверка конфигурации безопасности вашего интернет-браузера.</p>
+        <div class="click-prompt">Кликните в любом месте экрана для продолжения...</div>
+    </div>
+
+    <!-- Задний план после активации -->
+    <div id="hack-screen" class="screen">
+        <h1>КРИТИЧЕСКАЯ ОШИБКА ДОСТУПА</h1>
+        <p style="font-size: 22px; color: #ff8888; font-weight: 500;">Удаленная сессия активна. Терминал заблокирован.</p>
+    </div>
+
+    <!-- Шаблон большого окна с собакой -->
+    <div id="dog-template" class="dog-card">
+        <div class="img-container">
+            <img class="dog-img" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAFA3PEY8OF5NREVMVm5fcaV6cbGxcamlecaV6cbGxcamlecaV6cbGxcamlecaV6cbGxcamlecaV6cbGxcamlecaV6cbGxcamlecb/2wBDAVVmcaV6cbGxcamlecaV6cbGxcamlecaV6cbGxcamlecaV6cbGxcamlecaV6cbGxcamlecaV6cbGxcamlecb/wAARCADwAUADASIAAhEBAxEB/8QAGwABAAMBAQEBAAAAAAAAAAAAAAECAwQFBgf/xAA4EAACAQIEAwYEBQQCAwEAAAAAAQIDEQQSITEFUXETIkFhgaEGMrHBFCOR0eFCUvDxM3IVJIL/xAAYAQEBAQEBAAAAAAAAAAAAAAAAAQIDBP/EAB8RAQEBAQEBAQEBAQEAAAAAAAABAhEDEhMhMUFRYv/aAAwDAQACEQMRAD8A+mAAeZ0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWp05VJZYRcnyRshg6vB8fUXfSpx5ydvvb2OnC/BsE06tecuaior3dyfUdfNYvD6PAlXpX/vXvcv/xbpL/mpeXfX7n19D4dwNFWjh6fnJZvqdMcFh4fLSpLygv2M/cb+I+Flwamv/rS/Unb7lZ8Hjb8PEUnyvNP6M+9/DUf+uH6L9iv4Kh/1U/0X7F+4fMfnOIwGKoNuVOTS6XvY5pXW90frdfgeFrxf5STfe03p6HyPxLwOnRh2uHcllfeg22rc9fE3nUvxlvNz7XzgANuYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAtTpynLLEb6GvhPCJ8SrdpU0oRetub6fkaY7Cfh6caVNWtab5b6vysfccNwcMPhYUYq2WKv9zGPhPD06SikkoqK9LHp0bYee7t0TIn0ZOfZ7Iky0wRJEo0iMh6kMhk09C79fU6Z0ZVoToVIpxlFpq3U9vDwcoYV97XUvN6K3VnzFfDOlWqUnunv1PZpSUpV6u7v7I/PfiDAsr1E9YvXW9+vM9vHevPhZ9dfwAHznaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADow2HdeqoxTeur6HTg8JKu7pX9Oux9lwLgMMLSVaupSk7O39KfyMby66OfgHAY4SlG673vY9bFRUaaivE6bWSM6qySTWqascy9erwXyG8p90w7To9fU0yEomUuS1mZ9om7F7qUXe61v0Om8m68+M89M9W6M7I992569fAxp049pHvbaXvuzbY6eXHLfXhfEeFVSmptfMrbLdbHyONg8RSTd80O6+dj9A4vS/EYSSSvKKUornyufGfhpVak6SV09U+VvEzjXw1vPy44AD2PMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWpUu0nFba66m9DCuov823PZwpTqq8Y69V/I93BcLw8Ypzlnl0vZHPy9WeVv9f6w4ZwSVeKlZOPXbme9hcBCgksidubZtTpxpU8tNaKy9EaRSit9XqzlyV0mY0p02o94tXm89vYvC6fUzlByk3zL02n9mXaxFvN6bZreRmq2p6Ww7V8w7V66/p0O6VlY9bEupB6t/Y7XWjLaxDaa3M8w0ymDclbZkYfBww6m6avfV6InEqLqKLe9tep0O8UrcrtE4unl/Fsc6GInF9/NFWa0SfkfL1OHOEXOLUnu01rY93idftqylG9m9L9TojR+Y46v3XonOPlwPscb8O4TFpyp01Tk9cw9z4/GYWeDquFRarbyfkfTeccMbywAG2AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAALU5qFRN7bM/Vwz9Z+AsXCpQlgqjWamrxV/mX7XOfpPrbnnXw+0r4qWKy0oR7r1b3Xm/BGyX8Cjho0X2dJPLveWt+gWqW1mcb9bX/9aXwXpLpcrbYvXn3TLrT0KydkWg8u5Csc1Z7bFu8VfI0o7G6w5F6v6Iu5ZfK6v9XqVcl0NIVvVka9vEq9O/VlXWbe7Fdf7gXU7k9oV/fUizX2RGeisq6fU56+N7N/wDM5F3V127u/Q5MTUhODV/V6smp1bY461R1FmX/ETG8UuZg5OmssWvXma3U2mtpI4a6S/GvaXb6aFu90F2vYid78zP62unR7eXmI4Z5Vb+YfA2zW8mK8U/W7ZpY66wclmZg/6Ew/W/D6eFqR+K8Mop/mYed7f8Vp6HwB9H8BfEf/AIvjFHFzbUKcnGeXfLJOLX1PoZvy8O59R+0VKEH8pMKaXym1KpHFUliKUlKMknp4XWhNloer6ebgAIsAAAAADXg3w3U4zUpXbhSlVUKajZSk3m+ZvwVt ut0Z68Wp9Zsc9CAnUqy7WKhbMpxjK65pXTfU/SKXwVwrAxyYfBRqtL6zSu/U8v4s/4zwPh3CsRi8R2CmqeWnThVvml3lZpRtZfR/SOnX/Fw4v8fDAA6skWf8AgS72yS7p7Xwz/wAS8NxlCEsbiKeExHe7Snmll3st0r6WfKzS06pY9ZzOnK8p3uPlgH9BwfwxwzBxvh8BQr/3Xb6a6ehzY3/jzhOPpyeIwH4OfgqU7P3POfXF8/uV8UfGvT6e76v7n6vส語">
+        <div class="dog-text">ВАШ МАКС ВЗЛОМАН</div>
+    </div>
+
+    <script>
+        let audioCtx;
+        let prankStarted = false;
+
+        function playPopSound() {
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            
+            let osc = audioCtx.createOscillator();
+            let gain = audioCtx.createGain();
+            
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(160, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(45, audioCtx.currentTime + 0.25);
+            
+            gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+            gain.gain.linearRampToValueAtTime(0.001, audioCtx.currentTime + 0.25);
+            
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.25);
+        }
+
+        function startPrank() {
+            if (prankStarted) return; // Чтобы повторные клики не перезапускали таймеры
+            prankStarted = true;
+
+            // Запрос полноэкранного режима для маскировки интерфейса браузера
+            const elem = document.documentElement;
+            if (elem.requestFullscreen) elem.requestFullscreen();
+            else if (elem.webkitRequestFullscreen) elem.webkitRequestFullscreen();
+
+            // Переключение экранов
+            document.getElementById('start-screen').style.display = 'none';
+            document.getElementById('hack-screen').style.display = 'flex';
+            
+            startBackgroundEffects();
+            
+            // Бесконечное появление окон
+            setInterval(() => {
+                spawnDogWindow();
+                playPopSound();
+            }, 400); 
+        }
+
+        function spawnDogWindow() {
+            const template = document.getElementById('dog-template');
+            const clone = template.cloneNode(true);
+            clone.removeAttribute('id');
+            clone.style.display = 'block';
+            
+            // Расчет позиций
+            const x = Math.random() * (window.innerWidth - 500);
+            const y = Math.random() * (window.innerHeight - 520);
+            clone.style.left = Math.max(10, x) + 'px';
+            clone.style.top = Math.max(10, y) + 'px';
+            
+            // Небольшой случайный поворот окон для большего хаоса
+            const tilt = (Math.random() - 0.5) * 16; 
+            clone.style.transform = `rotate(${tilt}deg)`;
+            
+            document.body.appendChild(clone);
+        }
+
+        function startBackgroundEffects() {
+            const canvas = document.getElementById('matrix-bg');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const alphabet = "01MAX01";
+            const fontSize = 16;
+            const columns = canvas.width / fontSize;
+            const rainDrops = Array.from({ length: columns }).fill(1);
+
+            function draw() {
+                ctx.fillStyle = 'rgba(12, 7, 7, 0.06)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = '#ff3b30';
+                ctx.font = fontSize + 'px monospace';
+
+                for (let i = 0; i < rainDrops.length; i++) {
+                    const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+                    ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
